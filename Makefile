@@ -73,8 +73,8 @@ haxe: $(MODULES:=.cmx)
 	$(OCAMLOPT) -o $(OUTPUT) $(NATIVE_LIBS) $(LIBS) $(MODULES:=.cmx)
 
 haxelib:
-	(cd $(CURDIR)/extra/haxelib_src && $(CURDIR)/$(OUTPUT) haxelib.hxml && nekotools boot bin/haxelib.n)
-	cp extra/haxelib_src/bin/haxelib$(EXTENSION) haxelib$(EXTENSION)
+	(cd $(CURDIR)/extra/haxelib_src && $(CURDIR)/$(OUTPUT) client.hxml && nekotools boot run.n)
+	mv extra/haxelib_src/run$(EXTENSION) haxelib$(EXTENSION)
 
 tools: haxelib
 
@@ -88,11 +88,10 @@ install:
 	rm -f $(INSTALL_BIN_DIR)/haxe
 	cp haxe $(INSTALL_LIB_DIR)
 	ln -s $(INSTALL_LIB_DIR)/haxe $(INSTALL_BIN_DIR)/haxe
+	cp haxelib $(INSTALL_LIB_DIR)
+	ln -s $(INSTALL_LIB_DIR)/haxelib $(INSTALL_BIN_DIR)/haxelib
 	chmod -R a+rx $(INSTALL_LIB_DIR)
 	chmod 777 $(INSTALL_LIB_DIR)/lib
-	# cp extra/haxelib_src/haxelib_script.sh $(INSTALL_DIR)/bin/haxelib
-	echo "#!/bin/sh" > $(INSTALL_BIN_DIR)/haxelib
-	echo "exec haxe -cp $(INSTALL_LIB_DIR)/extra/haxelib_src/src --run tools.haxelib.Main \"\$$@\"" >> $(INSTALL_BIN_DIR)/haxelib
 	chmod a+rx $(INSTALL_BIN_DIR)/haxe $(INSTALL_BIN_DIR)/haxelib
 
 # will install native version of the tools instead of script ones
